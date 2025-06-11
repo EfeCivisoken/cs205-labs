@@ -1,0 +1,81 @@
+body {
+    background-color: blanchedalmond;
+    font-family:sans-serif;
+    justify-content: center;
+    text-align: center;
+}
+
+button:not([disabled]):hover {
+    background-color: aquamarine;
+    border-radius: 20%;
+}
+
+button:disabled:hover {
+    border-style: groove;
+}
+
+#nav {
+    text-align: right;
+}
+
+.timer_disp {
+    font-size: 60pt;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Table Stuff */
+table, tr {
+    width: 100%;
+}
+
+th {
+    text-decoration: underline;
+}
+
+th, td, tr {
+    text-align: center;
+}
+
+.bucket {
+    border: double;
+}
+
+/* KanBan Stuff */
+.editable:hover {
+    color:blueviolet;
+    text-decoration: underline;
+}
+
+.edContainer a {
+    font-style: italic;
+    font-size:smaller;
+}
+
+.edContainer a:hover {
+    color:blue;
+    text-decoration: underline;
+}
+
+.task {
+    padding: 1%;
+    margin: 5%;
+    width: fit-content;
+    border: 1px dashed navy;
+}
+
+.return-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.return-button:hover {
+    background-color: #0056b3;
+}

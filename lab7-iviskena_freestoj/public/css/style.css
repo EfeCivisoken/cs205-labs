@@ -1,0 +1,132 @@
+a.disabled {
+    pointer-events: none;
+    background-color: grey;
+}
+
+.container {
+    border: 5px solid rgb(0, 0, 0);
+    padding: 10px;
+    margin: 50px;
+    width: fit-content;
+    text-align: center;
+    float: center;
+}
+
+.container-noborder {
+    padding: 10px;
+    margin: 50px;
+    width: fit-content;
+    text-align: center;
+    float: center;
+}
+
+.left {
+    padding: 10px;
+    width: fit-content;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, .user-table td {
+    border: 1px solid #bdcdec;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: slategray;
+}
+
+table tr:hover {
+    background-color: #413450;
+}
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Pushes one to the left, the other to the right */
+    width: 100%;
+    padding: 10px;
+}
+
+a:link {
+    color: aqua;
+}
+a:visited, a:active {
+    color: aquamarine;
+}
+
+.nice-button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.nice-button:hover, .generate-button:hover {
+    background-color: #0056b3;
+}
+
+br {
+    margin-top: 20pt;
+    margin-bottom: 20pt;
+}
+
+/* Efe Game Stuff */
+body {
+    text-align: center;
+    background: #222;
+    color: papayawhip;
+    margin: 0;
+    padding: 10px;
+  }
+  
+  canvas {
+    background: #333;
+    display: block;
+    margin: 20px auto;
+    border: 2px solid #000000;
+  }
+  
+  #score, #timer {
+    font-size: 15px;
+    margin: 7px;
+  }
+  
+  /* wanted to ensure it always stays in the center.*/
+  #startButton {
+    display: block;
+    margin: 15px auto;
+    font-size: 15px;
+    padding: 7px 15px;
+    cursor: pointer;
+  }
+  
+  
+/* Added for Joe's game */
+.term-output {  /* Somewhat emulate a phosphor CRT terminal */
+    background-color: #413450;
+    color: greenyellow;
+    text-shadow: yellowgreen 1px 0 10px;
+    font-family: monospace;
+    text-size-adjust: 80%;
+}
+
+.term-input {  /* Somewhat emulate a phosphor CRT terminal */
+    background-color: #413450;
+    color: greenyellow;
+    text-shadow: yellowgreen  1px 0 10px;
+    font-family: monospace;
+    
+    padding: 10pt;
+}

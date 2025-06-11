@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/css/style.css">
+        <title>Players</title>
+    </head>
+    <body>
+
+        <div class="left">
+            <a href="/" class="nice-button">Return Home</a>
+        </div>
+
+        <h1>List of players</h1>
+
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Time Created</th>
+                <th>Lifetime Games</th>
+            </tr>
+
+            <% players.forEach(player => { %>
+                <tr onclick="window.location='/player/<%= player.player_id %>';">
+                    <td title="User ID: <%= player.player_id %>"><%= player.username %></td>
+                    <td><%= player.email %></td>
+                    <td><%= player.created_at %></td>
+                    <td><%= player.lifetime_games %></td>
+                </tr>
+            <% }); %>
+        </table>
+
+    </body>
+</html>

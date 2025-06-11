@@ -1,0 +1,32 @@
+<!-- Example user entry: { id: 2, name: 'Bob', email: 'bob@example.com', age: 30 } -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= user['name'] %></title>
+        <!-- <link rel="stylesheet" href="/css/productivity.css"> -->
+        <link rel="stylesheet" href="/css/user.css">
+    </head>
+
+    <body>
+        <div>
+            <a href="/users" class="nice-button">Return to the users page</a>
+            <a href="/deluser/<%= user['id'] %>" class="nice-button" style="background-color: red;">DELETE this user</a>
+        </div>
+
+        <div class="user-container">
+            <h1><%= user['name'] %></h1>
+            <p>
+                User ID: <%= user['id'] %>
+            </p>
+            
+            <p>
+                Email Address: <a href="mailto:<%= user['email'] %>"> <%= user['email'] %> </a>
+            </p>
+            
+            <p>
+                Age: <%= user['age'] %>
+            </p>
+        </div>
+    </body>
+</html>

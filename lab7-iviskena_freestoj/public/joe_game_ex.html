@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Adventure Game</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <script src="/js/adventureLogic.js" defer></script>
+        <script src="/js/adventureWorld.js" defer></script>
+        <script src="/js/adventure.js" defer></script>
+    </head>
+    <body>
+        <h1>Example Beginning Gameplay</h1>
+
+<textarea id="text-output" class="term-output" rows="20" cols="40" readonly>
+By the Mailbox:
+~~~
+You are outside, and it's chilly out here.
+There is a path that proceeds West.
+
+There is a mailbox here.
+
+
+>>> inspect mailbox
+mailbox:
+~~~
+A beaten mailbox with fading and chipped paint.
+The mailbox is shut.
+
+>>> open the mailbox
+You opened the mailbox.
+
+>>> inspect mailbox
+mailbox:
+~~~
+A beaten mailbox with fading and chipped paint.
+The mailbox is open.
+
+There is a leaflet inside.
+
+
+>>> pick up the leaflet
+You picked up the leaflet
+
+>>> what do I have?
+Current Possessions
+~~~
+- leaflet
+
+
+>>> inventory
+Current Possessions
+~~~
+- leaflet
+
+
+>>> read leaflet
+leaflet:
+~~~
+This leaflet contains the following message:
+
+Welcome to Joseph R. Freeston's text-based adventure game!
+This game is heavily inspired by the ZORK I: The Great Underground Empire.
+I won't spoil too much of the lore for you quite yet.
+But you should know that your score will be based on how much gold you collect.
+
+>>> drop the leaflet
+Dropped leaflet
+
+>>> look around
+By the Mailbox:
+~~~
+You are outside, and it's chilly out here.
+There is a path that proceeds West.
+
+There is a mailbox here.
+There is a leaflet here.
+
+
+>>> go west
+The Forest Path:
+~~~
+You are on a dirt road that heads into the forest to the north.
+To the East is an area with a mailbox.
+
+
+
+>>> jump
+Now hardly seems an appropriate time for showing off.
+
+>>> 
+</textarea>
+
+        <br>
+    </body>
+</html>

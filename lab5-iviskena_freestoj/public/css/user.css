@@ -1,0 +1,51 @@
+.user-container {
+    border: 5px solid rgb(0, 0, 0);
+    padding: 10px;
+    margin: 10px;
+    width: fit-content;
+    text-align: center;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.user-table th, .user-table td {
+    border: 1px solid #e8e4e4;
+    padding: 10px;
+    text-align: left;
+}
+
+.user-table th {
+    background-color: #c6bcbc;
+}
+
+.user-table tr:hover {
+    background-color: #f1f1f1;
+}
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Pushes one to the left, the other to the right */
+    width: 100%;
+    padding: 10px;
+}
+
+.nice-button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.return-button:hover, .generate-button:hover {
+    background-color: #0056b3;
+}

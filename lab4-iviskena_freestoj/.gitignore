@@ -1,0 +1,8 @@
+node_modules/ # Dependencies installed by npm
+.env # Environment variables
+.DS_Store # macOS system files
+
+# Ignoring log and configuration files (also example.txt which is unrelated) as they are not to be shown in repo and byproduct of execution.
+mylog.txt
+config.txt
+example.txt

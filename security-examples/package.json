@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "better-sqlite3": "^11.9.1",
+    "escape-html": "^1.0.3",
+    "express": "^5.1.0",
+    "path": "^0.12.7",
+    "readline-sync": "^1.4.10"
+  }
+}

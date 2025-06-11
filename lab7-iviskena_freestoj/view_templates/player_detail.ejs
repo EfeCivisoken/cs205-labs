@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= player.username %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container-noborder">
+        <a onclick="history.back()" class="nice-button">Return to previous page</a>
+    </div>
+
+    <div class="container">
+        <h1><%= player.username %></h1>
+        <p>
+            User ID: <%= player.player_id %>
+        </p>
+        
+        <p>
+            Email Address: <a href="mailto:<%= player.email %>"><%= player.email %></a>
+        </p>
+        
+        <p>
+            Account Creation Date: <%= player.created_at %>
+        </p>
+
+        <h2>List of Games Played and Details</h2>
+        <% if (games.length > 0) { %>
+            <ul>
+                <% games.forEach(game => { %>
+                    <li>
+                        <strong><%= game.name %></strong> - Score: <%= game.score %> 
+                        (Outcome: <%= game.outcome %>, Played on <%= game.completed_at %>)
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>No games played yet.</p>
+        <% } %>
+    </div>
+</body>
+</html>

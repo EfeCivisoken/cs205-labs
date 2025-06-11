@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>KanBan & Pomodoro</title>
+
+        <link rel="stylesheet" href="css/productivity.css">
+        <link rel="stylesheet" href="css/user.css">
+        <script src="js/kanban.js" defer></script>
+        <script src="js/countdown-timer.js" defer></script>
+    </head>
+
+    <body>
+        <button id="btn_return_main" class="nice-button">Return to Main Page</button>
+
+
+        <div id="nav">
+            <button id="btn_show_kanban" disabled>Kanban</button>
+            <button id="btn_show_pomodoro">Pomodoro</button>
+        </div>
+        
+        <div id="view_kanban">
+            <h1>Kanban Board</h1>
+
+            <div style="display: none;"> <!-- Example task... cloned for new ones -->
+                <div id="taskCardModel" class="edContainer task" draggable="true" ondragstart="taskOnDrag(event)">
+                    <input type="checkbox">
+                    <div class="editable">
+                        [click to edit]
+                    </div>
+                </div>
+            </div>
+
+            <table class="table_kanban">
+                <tr>
+                    <th class="editable">To-Do</th>
+                    <th class="editable">Doing</th>
+                    <th class="editable">Done</th>
+                </tr>
+                <tr>
+                    <td> <!-- Bucket 1 stuff here -->
+                        <div id="bucket1" class="bucket" ondrop="bucketOnDrop(event)" ondragover="bucketAllowDrop(event)">
+                            <br><br>
+                        </div>
+
+                        <button onclick="newTaskCard('bucket1')">New Task</button>
+                    </td>
+                    <td> <!-- Bucket 2 stuff here -->
+                        <div id="bucket2" class="bucket" ondrop="bucketOnDrop(event)" ondragover="bucketAllowDrop(event)">
+                            <br><br>
+                        </div>
+
+                        <button onclick="newTaskCard('bucket2')">New Task</button>
+                    </td>
+                    <td> <!-- Bucket 3 stuff here -->
+                        <div id="bucket3" class="bucket" ondrop="bucketOnDrop(event)" ondragover="bucketAllowDrop(event)">
+                            <br><br>
+                        </div>
+
+                        <button onclick="newTaskCard('bucket3')">New Task</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="view_pomodoro" style="display:none;">
+            <h1>Pomodoro Timer</h1>
+
+            <!-- Actual timer display -->
+            <span class="timer_disp", id="timer">00</span>
+
+            <br>
+
+            <!-- User Input -->
+            <button id="btn_reset">Reset</button>
+            <button id="btn_start">Start</button>
+            <button id="btn_stop" disabled>Pause</button>
+            <button id="btn_edit_time">Edit Time</button>
+
+            <br>
+            <select id="select_timer">
+                <option value="25">Study (25min default)</option>
+                <option value="5">Break (5min default)</option>
+                <option value="25">Study 2 (25min default)</option>
+                <option value="15">Break 2 (15min default)</option>
+            </select>
+            
+
+        </div>
+    </body>
+</html>

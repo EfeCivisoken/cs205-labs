@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/css/style.css">
+        <title>Leaderboard</title>
+    </head>
+    <body>
+        <div class="left">
+            <a href="/" class="nice-button">Return Home</a>
+        </div>
+
+        <a href="/leaderboard/6" class="nice-button <%= (game=='Tank Game') ? 'disabled' : '' %>">Tank Game Leaderboard</a>
+        <a href="/leaderboard/7" class="nice-button <%= (game=='Adventure Game') ? 'disabled' : '' %>">Adventure Game Leaderboard</a>  &nbsp;&nbsp;
+        <a href="/leaderboard" class="nice-button <%= (game) ? '' : 'disabled' %>">Overall Leaderboard</a>
+        
+
+
+        <h1>Leaderboard <%= game ? ('for ' + game) : '(Overall)' %></h1>
+
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>High Score</th>
+                <th>Number of Games</th>
+                <th>Lifetime Points</th>
+            </tr>
+
+            <% players.forEach(player => { %>
+                <tr onclick="window.location='/player/<%= player.id %>';">
+                    <td title="User ID: <%= player.id %>"><%= player.username %></td>
+                    <td><%= player.high_score %></td>
+                    <td><%= player.num_games %></td>
+                    <td><%= player.total_points %></td>
+                </tr>
+            <% }); %>
+        </table>
+
+    </body>
+</html>

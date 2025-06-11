@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Adventure Game</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <script src="/js/adventureLogic.js" defer></script>
+        <script src="/js/adventureWorld.js" defer></script>
+        <script src="/js/adventure.js" defer></script>
+    </head>
+    <body>
+        <h1>Text-Based Adventure Game</h1>
+
+        <a class="nice-button" href="/">Home</a>
+        <a class="nice-button" href="/leaderboard/7" target="_blank">Leaderboard for Adventure Game</a>
+        <a class="nice-button" href="/joe_game_ex.html" target="_blank" title="An example beginning gameplay">Help</a>
+        <button class="nice-button" onclick="cashIn()">Cash in gold for points (finish game)</button>
+        <br>
+
+<textarea id="text-output" class="term-output" rows="20" cols="40" readonly>
+Game is loading...
+</textarea>
+
+        <br>
+
+        <input type="text" id="text-input" class="term-input">
+    </body>
+</html>

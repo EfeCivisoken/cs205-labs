@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tank Game</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <h1>Tank Game</h1>
+  <div id="score">Score: 0</div>
+  <div id="timer">Time: 60</div>
+  <!-- Start button -->
+
+  <a class="nice-button" href="/">Home</a>
+  <a class="nice-button" href="/leaderboard/6" target="_blank">Leaderboard for Tank Game</a>
+
+  <button id="startButton">Start Game</button>
+  <canvas id="gameCanvas" width="600" height="450"></canvas>
+  
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // First defined global game state
+    let gameRunning = false;
+    let gameTimer = 60;  // ın second!
+    let countdownInterval;
+    let finalScore = 0;
+    let outcomeReason = '';
+    
+    // Add debug: global variable to restrict shooting rate
+    let lastShotTime = 0;
+    
+    // Tank object: starting at the center-bottom of the canvas
+    let tank = {
+      x: canvas.width / 2,
+      y: canvas.height - 50,
+      width: 40,
+      height: 20,
+      angle: 0  // cannon angle in radians
+    };
+    
+    // Defining arrays to hold projectiles and targets
+    let projectiles = [];
+    let targets = [];
+    
+    let score = 0;
+    
+    // Movement keys 
+    let keys = {};
+    
+    // Create targets at random locations 
+    function createTarget() {
+      const safeDistance = 50; // Minimum distance from the tank in pixels
+      let target;
+      let attempts = 0;
+      // added a safe distance mechanism for spawns next to or inside of the tank.
+      do {
+        target = {
+          x: Math.random() * (canvas.width - 10) + 5, 
+          y: Math.random() * (canvas.height - 10) + 5, // ensures targets are not in edges
+          radius: 5 // Can be modified to change the difficulty actually!
+        };
+        attempts++;
+        if (attempts > 30) break; // safety break to avoid infinite loops in case we are extremely unlucky
+      } while (Math.sqrt((target.x - tank.x) ** 2 + (target.y - tank.y) ** 2) < safeDistance);
+      
+      // Added: assign random velocities to the target
+      target.vx = (Math.random() - 0.5) * 4; // random velocity between -2 and 2 for both i and j vectors.
+      target.vy = (Math.random() - 0.5) * 4;
+      targets.push(target); // pushes to our target array
+    }
+
+    
+    // Create a few initial targets TODO: CAN ADD LEVELS WITH DIFFERENT DIFFICULTIES AND INITIAL TARGETS.
+    for (let i = 0; i < 4; i++) { // decreased it to 4 as we added an increasing mechanism.
+      createTarget();
+    }
+    
+    // Draw the tank
+    function drawTank() {
+      ctx.save();
+      ctx.translate(tank.x, tank.y); 
+      ctx.rotate(tank.angle);
+      ctx.fillStyle = 'green';
+      ctx.fillRect(-tank.width / 2, -tank.height / 2, tank.width, tank.height);
+      // Draw the cannon as a rectangle extending from the center-right edge
+      ctx.fillStyle = 'darkgreen';
+      ctx.fillRect(0, -5, 30, 10);
+      ctx.restore();
+    }
+    
+    // Draw projectiles
+    function drawProjectiles() {
+      ctx.fillStyle = 'black';
+      projectiles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+    
+    // Draw targets
+    function drawTargets() {
+      ctx.fillStyle = 'red';
+      targets.forEach(t => {
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, t.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+    
+    // Update projectile positions
+    function updateProjectiles() {
+      projectiles = projectiles.filter(p => p.y > 0 && p.x > 0 && p.x < canvas.width);
+      projectiles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+      });
+    }
+    
+    //Update target positions and bounce off edges
+    function updateTargets() {
+      targets.forEach(t => {
+        t.x += t.vx;
+        t.y += t.vy;
+        // Bounce off left right edges
+        if (t.x <= t.radius || t.x >= canvas.width - t.radius) {
+          t.vx = -t.vx;
+        }
+        // Bounce off top-bottom edges
+        if (t.y <= t.radius || t.y >= canvas.height - t.radius) {
+          t.vy = -t.vy;
+        }
+      });
+    }
+    
+    // Check for collisions between projectiles and targets
+    function checkCollisions() {
+      projectiles.forEach((p, pi) => {
+        targets.forEach((t, ti) => {
+          let dx = p.x - t.x;
+          let dy = p.y - t.y;
+          let dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < t.radius + 5) {  // collision condition
+            score += 10;
+            document.getElementById('score').textContent = 'Score: ' + score;
+            // Remove projectile and target on collision
+            projectiles.splice(pi, 1);
+            targets.splice(ti, 1);
+            // Create a new target
+            // Added a chance mechanism to make the game exponentially harder.
+            if (Math.random() < 0.4) {
+              createTarget();
+              createTarget();
+            } else {
+              createTarget();
+            }    
+          }
+        });
+      });
+    }
+    
+    // Added: Check if any target touches the tank, game ends immediately
+    function checkTankCollision() {
+      // Approximate the tank as a circle with radius = tank.width/2 TODO
+      let tankRadius = tank.width / 2;
+      targets.forEach(t => {
+        let dx = tank.x - t.x;
+        let dy = tank.y - t.y;
+        let dist = Math.sqrt(dx * dx + dy * dy); // basic distance calculation thanks to our assumption
+        if (dist < t.radius + tankRadius) {
+          outcomeReason = 'Tank collided with a target! Game Over.'
+          endGame();
+        }
+      });
+    }
+    
+    // Update tank position based on pressed keys
+    function updateTank() {
+      let dx = 0, dy = 0;
+      if (keys['ArrowLeft']) dx -= 1;
+      if (keys['ArrowRight']) dx += 1;
+      if (keys['ArrowUp']) dy -= 1;
+      if (keys['ArrowDown']) dy += 1;
+    
+      if (dx !== 0 || dy !== 0) { // for example up and left at the same time
+        let mag = Math.sqrt(dx * dx + dy * dy);
+        // normalized to maintain magnitude of 1 speed. Used mag variable to make the changes easier if we wanna change speed levels.
+        dx = (dx / mag);
+        dy = (dy / mag);
+        tank.x += dx;
+        tank.y += dy;
+      }
+      // I fixed canvas bug to keep tank within boundaries. this logic ensures it stays within the boundaries.
+      tank.x = Math.max(tank.width / 2, Math.min(canvas.width - tank.width / 2, tank.x));
+      tank.y = Math.max(tank.height / 2, Math.min(canvas.height - tank.height / 2, tank.y));
+    }
+    
+    // Main game loop
+    function gameLoop() {
+      if (!gameRunning) return;
+      updateTank();
+      updateTargets(); // Update target positions each frame
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawTank();
+      drawProjectiles();
+      drawTargets();
+      updateProjectiles();
+      checkCollisions();
+      checkTankCollision(); // Check if any target touches the tank
+      requestAnimationFrame(gameLoop);
+    }
+    
+    // Start game function
+    function startGame() {
+      gameRunning = true;
+      gameTimer = 60;
+      score = 0;
+      outcomeReason = "Time's up!";
+      document.getElementById('score').textContent = 'Score: ' + score;
+      document.getElementById('timer').textContent = 'Time: ' + gameTimer;
+      // Reset tank position and angle
+      tank.x = canvas.width / 2;
+      tank.y = canvas.height - 50;
+      tank.angle = 0;
+      projectiles = [];
+      targets = [];
+      for (let i = 0; i < 4; i++) {
+        createTarget();
+      }
+      gameLoop();
+      countdownInterval = setInterval(() => {
+        gameTimer--;
+        document.getElementById('timer').textContent = 'Time: ' + gameTimer;
+        if (gameTimer <= 0) {
+          clearInterval(countdownInterval);
+          endGame();
+        }
+      }, 1000);
+    }
+    
+    // End game function
+    function endGame() {
+      gameRunning = false;
+      clearInterval(countdownInterval); // Ensure timer stops
+      finalScore = score;
+      let targetsDestroyed = score / 10;
+      let finalAlert = outcomeReason + " You destroyed " + targetsDestroyed + " targets. Your score: " + finalScore
+      alert(finalAlert);
+
+      // Prompt for username and email 
+      let username = prompt("Enter your username:");
+      let email = prompt("Enter your email:");
+      
+      // Send the game data to the server using a POST request to /submitGame
+      fetch('/submitGame', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          game_definition_id: 6, // assuming efe_game has id 6 need to be careful with it
+          username: username,
+          email: email,
+          score: finalScore,
+          outcome: finalAlert,
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Game data submitted:', data);
+      })
+      .catch(error => {
+        console.error('Error submitting game data:', error);
+      });
+
+
+
+      // Reset the start button so the user can restart the game
+      document.getElementById('startButton').style.display = 'block';
+    }
+    
+    // Prevent arrow keys from scrolling the page
+    window.addEventListener("keydown", function(e) {
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        e.preventDefault();
+      }
+    }, false);
+    
+    // Handle keydown events
+    document.addEventListener('keydown', e => {
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        keys[e.key] = true;
+      }
+      if (e.key === 'z' || e.key === 'Z') {
+        tank.angle -= 0.1;
+      }
+      if (e.key === 'x' || e.key === 'X') {
+        tank.angle += 0.1;
+      }
+      if (e.key === ' ') {
+        // Limit shooting to one shot per 0.5 seconds (500 ms)
+        if (Date.now() - lastShotTime >= 500) {
+          let angle = tank.angle;
+          let vx = Math.cos(angle) * 8;
+          let vy = Math.sin(angle) * 8;
+          let startX = tank.x + Math.cos(angle) * 30;
+          let startY = tank.y + Math.sin(angle) * 30;
+          projectiles.push({ x: startX, y: startY, vx: vx, vy: vy });
+          lastShotTime = Date.now();
+        }
+      }
+    });
+    
+    // Handle keyup events to stop movement
+    document.addEventListener('keyup', e => {
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        keys[e.key] = false;
+      }
+    });
+    
+    // Start game when start button is clicked
+    document.getElementById('startButton').addEventListener('click', () => {
+      startGame();
+      document.getElementById('startButton').style.display = 'none';
+    });
+
+  </script>
+
+</body>
+</html>
